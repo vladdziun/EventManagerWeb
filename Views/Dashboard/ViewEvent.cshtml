@@ -1,0 +1,25 @@
+@model Event
+<partial name="DashboardPartial"/>
+<h1>Title: @Model.EventTitle</h1>
+<h2>Event Coordinator: @Model.CreatorName</h2>
+<h2>Description: </h2>
+<p>@Model.Description</p>
+<p>@Model.EventDate.ToString("dddd, dd MMMM yyyy")</p>
+<h1>All Participants </h1>
+@foreach (var g in Model.Guests)
+{
+    <p>@g.User.FirstName @g.User.LastName</p>
+}
+
+            @if(@Model.UserId == @ViewBag.UserId)
+            {
+                <a href="/delete/event/@Model.Id">Delete</a>
+            }else{
+                @if(Model.Guests.Any (g => g.UserId == @ViewBag.UserId))
+                {
+                    <a href="/leave/event/@Model.Id">Leave</a>
+                }else
+                {
+                    <a href="/join/event/@Model.Id">Join</a> 
+                }
+            }
