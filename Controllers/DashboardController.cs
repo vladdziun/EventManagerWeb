@@ -19,7 +19,7 @@ namespace EventManagerWeb.Controllers
         public IActionResult Dashboard()
         {
             var userId = HttpContext.Session.GetString("UserId");
-            //ValidateUserLoggedIn(userId);
+            ValidateUserLoggedIn(userId);
 
             List<Event> AllEvents = _dbContext.Events
                 .Include(w => w.Guests)
@@ -34,7 +34,7 @@ namespace EventManagerWeb.Controllers
         [HttpGet]
         public IActionResult AddEvent()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            var userId = HttpContext.Session.GetString("UserId");
             ValidateUserLoggedIn(userId);
 
             return View("AddEvent");
@@ -45,12 +45,11 @@ namespace EventManagerWeb.Controllers
         public IActionResult CreateEvent(Event newEvent)
         {
             var userId = HttpContext.Session.GetString("UserId");
-            //ValidateUserLoggedIn(userId);
-            var ll = _dbContext.Users.FirstOrDefault(w => w.Id == userId);
+            ValidateUserLoggedIn(userId);
 
             if (ModelState.IsValid)
             {
-                var oneUser = _dbContext.Users.FirstOrDefault(w => w.Id == userId);
+                var oneUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
                 newEvent.CreatorName = oneUser.FirstName;
                 newEvent.UserId = userId;
                 _dbContext.Add(newEvent);
@@ -61,32 +60,49 @@ namespace EventManagerWeb.Controllers
             return View("AddEvent");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SearchEvent()
+        {
+            var searchString = Request.Form["searchString"];
+
+            var events = await _dbContext.Events
+                .Include(w => w.Guests)
+                .Where(e => e.EventTitle
+                .Contains(searchString))
+                .ToListAsync();
+
+            return View("Dashboard", events);
+        }
+
         [Route("join/event/{eventId}")]
         [HttpGet]
         public IActionResult JoinEvent(string eventId)
         {
             var userId = HttpContext.Session.GetString("UserId");
-            //ValidateUserLoggedIn(userId);
+            ValidateUserLoggedIn(userId);
 
-            Event oneEvent = _dbContext.Events
-                .Include(w => w.Guests)
-                .ThenInclude(a => a.User)
-                .FirstOrDefault(w => w.Id == eventId);
+            var oneEvent = _dbContext.Events
+                      .Include(w => w.Guests)
+                      .ThenInclude(a => a.User)
+                      .FirstOrDefault(w => w.Id == eventId);
 
-            User oneUser = _dbContext.Users
+            var oneUser = _dbContext.Users
                 .Include(u => u.UserEvents)
                 .ThenInclude(a => a.Event)
                 .FirstOrDefault(u => u.Id == userId);
+            if (oneEvent == null)
+            {
+                throw new Exception($"Event with {eventId} can't be found!");
+            }
 
-
-            Association newAssociation = new Association()
+            var newAssociation = new Association()
             {
                 UserId = userId,
                 EventId = eventId
             };
 
             _dbContext.Associations.Add(newAssociation);
-            oneEvent.Guests.Add(newAssociation);
+            oneEvent?.Guests?.Add(newAssociation);
             _dbContext.SaveChanges();
 
             return RedirectToAction("Dashboard");
@@ -97,7 +113,7 @@ namespace EventManagerWeb.Controllers
         public IActionResult LeaveEvent(string eventId)
         {
             var userId = HttpContext.Session.GetString("UserId");
-            //ValidateUserLoggedIn(userId);
+            ValidateUserLoggedIn(userId);
 
             var oneAssociation = _dbContext.Associations
                 .FirstOrDefault(a => a.EventId == eventId && a.UserId == userId);
@@ -113,13 +129,13 @@ namespace EventManagerWeb.Controllers
         public IActionResult ViewEvent(string eventId)
         {
             var userId = HttpContext.Session.GetString("UserId");
-            //ValidateUserLoggedIn(userId);
+            ValidateUserLoggedIn(userId);
 
-            Event oneEvent = _dbContext.Events
+            ViewBag.UserId = userId;
+            var oneEvent = _dbContext.Events
                 .Include(w => w.Guests)
                 .ThenInclude(a => a.User)
                 .FirstOrDefault(w => w.Id == eventId);
-            ViewBag.UserId = userId;
 
             return View("ViewEvent", oneEvent);
         }
@@ -128,14 +144,14 @@ namespace EventManagerWeb.Controllers
         [HttpGet]
         public IActionResult DeleteEvent(string eventId)
         {
-            Event oneEvent = _dbContext.Events.FirstOrDefault(w => w.Id == eventId);
+            var oneEvent = _dbContext.Events.FirstOrDefault(e => e.Id == eventId);
             _dbContext.Remove(oneEvent);
             _dbContext.SaveChanges();
 
             return RedirectToAction("Dashboard");
         }
 
-        private IActionResult ValidateUserLoggedIn(int? userId)
+        private IActionResult ValidateUserLoggedIn(string userId)
         {
             if (userId == null)
             {

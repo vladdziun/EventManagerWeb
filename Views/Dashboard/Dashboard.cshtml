@@ -5,14 +5,18 @@
 <body>
     <h1>Welcome to Event Planner!</h1>
     <a href = "/add/event">Add Event</a> 
-    <a href = "/logout">Logout</a> 
+
+<form asp-action="SearchEvent" asp-controller="Dashboard" method="post">
+        <input type="text" name="searchString" />
+        <input type="submit" value="Search" />
+    </form>
 
     @foreach (var w in Model)
     {
         @if(w.EventDate > DateTime.Today )
         {
         <p><a href = "/view/@w.Id">@w.EventTitle </a> Date: @w.EventDate.ToString("MMMM dd") at @w.EventTime.ToString("h:mm tt")
-         | Duration: @w.Duration @w.TimeType | Event Coordinator: @w.CreatorName | Participants: @w.Guests.Count | 
+         | Duration: @w.Duration @w.TimeType | Event Coordinator: @w.CreatorName | Participants: @w.Guests?.Count | 
             Action:
             @if(@w.UserId == @ViewBag.UserId)
             {

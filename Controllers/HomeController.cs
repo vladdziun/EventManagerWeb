@@ -33,6 +33,8 @@ namespace EventManagerWeb.Controllers
             if (!string.IsNullOrEmpty(userId))
             {
                 HttpContext.Session.SetString("UserId", userId);
+                return RedirectToAction("Dashboard", "Dashboard");
+
             }
             return View();
         }
