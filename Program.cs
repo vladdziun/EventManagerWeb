@@ -1,5 +1,6 @@
 using EventManagerWeb.Data;
 using EventManagerWeb.Models;
+using EventManagerWeb.Services;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,9 @@ builder.Services.AddAuthentication()
     });
 builder.Services.AddScoped<PasswordHasher<User>>();
 builder.Services.AddSession();
+
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<GeocoderService>();
 
 var app = builder.Build();
 

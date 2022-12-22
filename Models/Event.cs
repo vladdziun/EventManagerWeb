@@ -14,6 +14,10 @@ namespace EventManagerWeb.Models
         [Display(Name = "Title")]
         public string EventTitle { get; set; }
 
+        [Required(ErrorMessage = "Address is required!")]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
         [Required(ErrorMessage = "Time is required!")]
         [DataType(DataType.Time)]
         public DateTime EventTime { get; set; }

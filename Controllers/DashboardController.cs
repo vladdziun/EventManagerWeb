@@ -1,21 +1,35 @@
-﻿using EventManagerWeb.Data;
+﻿using EventManagerWeb.Controllers.Attributes;
+using EventManagerWeb.Data;
+using EventManagerWeb.DTO;
 using EventManagerWeb.Models;
+using EventManagerWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Xml.Linq;
 
 namespace EventManagerWeb.Controllers
 {
     public class DashboardController : Controller
     {
-        private ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
+        private readonly GeocoderService _geocoderService;
 
-        public DashboardController(ApplicationDbContext dbContext)
+
+        public DashboardController(ApplicationDbContext dbContext, EmailService emailService, 
+            IConfiguration configuration, GeocoderService geocoderService)
         {
             _dbContext = dbContext;
+            _emailService = emailService;
+            _configuration = configuration;
+            _geocoderService = geocoderService;
         }
 
         [Route("dashboard")]
         [HttpGet]
+        [AuthorizeUserAttribute]
         public IActionResult Dashboard()
         {
             var userId = HttpContext.Session.GetString("UserId");
@@ -82,9 +96,9 @@ namespace EventManagerWeb.Controllers
             ValidateUserLoggedIn(userId);
 
             var oneEvent = _dbContext.Events
-                      .Include(w => w.Guests)
-                      .ThenInclude(a => a.User)
-                      .FirstOrDefault(w => w.Id == eventId);
+                .Include(w => w.Guests)
+                .ThenInclude(a => a.User)
+                .FirstOrDefault(w => w.Id == eventId);
 
             var oneUser = _dbContext.Users
                 .Include(u => u.UserEvents)
@@ -104,6 +118,14 @@ namespace EventManagerWeb.Controllers
             _dbContext.Associations.Add(newAssociation);
             oneEvent?.Guests?.Add(newAssociation);
             _dbContext.SaveChanges();
+
+            var request = new EmailDto()
+            {
+                To = oneUser.Email,
+                Subject = $"Confirmation for {oneEvent.EventTitle}",
+                Body = $"You signed up for {oneEvent.EventTitle} at on {oneEvent.EventDate} at {oneEvent.EventTime}"
+            };
+            _emailService.SendEmail(request);
 
             return RedirectToAction("Dashboard");
         }
@@ -136,6 +158,10 @@ namespace EventManagerWeb.Controllers
                 .Include(w => w.Guests)
                 .ThenInclude(a => a.User)
                 .FirstOrDefault(w => w.Id == eventId);
+
+            var geoResponse = _geocoderService.GetLongitudeAndLatitudeFromAddress(oneEvent.Address);
+            ViewBag.Latitude = geoResponse.Latitude;
+            ViewBag.Longitude = geoResponse.Longitude;
 
             return View("ViewEvent", oneEvent);
         }
