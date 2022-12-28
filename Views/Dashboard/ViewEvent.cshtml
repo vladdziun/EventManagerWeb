@@ -5,6 +5,7 @@
 <h3>Event Coordinator: @Model.CreatorName</h3>
 <p>@Model.Description</p>
 <p>@Model.EventDate.ToString("dddd, dd MMMM yyyy")</p>
+<p>@Model.EventTime.ToString("h:mm tt")</p>
 <p>@Model.Address</p>
 @if(Model.Guests?.Count > 0)
 {

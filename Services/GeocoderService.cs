@@ -13,12 +13,12 @@ namespace EventManagerWeb.Services
             _configuration= configuration;
         }
 
-        public GeocoderResponse GetLongitudeAndLatitudeFromAddress(string address)
+        public async Task<GeocoderResponse> GetLongitudeAndLatitudeFromAddress(string address)
         {
             string requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), _configuration["GoogleMaps:Key"]);
 
             WebRequest request = WebRequest.Create(requestUri);
-            WebResponse response = request.GetResponse();
+            WebResponse response = await request.GetResponseAsync();
             XDocument xdoc = XDocument.Load(response.GetResponseStream());
 
             XElement result = xdoc.Element("GeocodeResponse").Element("result");

@@ -67,7 +67,6 @@ namespace EventManagerWeb.Controllers
                 _dbContext.SaveChanges();
                 var userToLogIn = _dbContext.Users.FirstOrDefault(u => u.Email == newUser.Email);
                 HttpContext.Session.SetString("Id", userToLogIn.Id);
-                //return RedirectToAction("Dashboard", "Dashboard");
                 return View("Index");
 
             }
@@ -75,7 +74,6 @@ namespace EventManagerWeb.Controllers
             {
                 return View("Index");
             }
-            return View("Index");
         }
     }
 }

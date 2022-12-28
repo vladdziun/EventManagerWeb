@@ -25,7 +25,7 @@ builder.Services.AddAuthentication()
     })
     .AddGoogle(options =>
     {
-        options.ClientId = configuration["Authentication:Google:ClientId"]; // move to user secret!
+        options.ClientId = configuration["Authentication:Google:ClientId"];
         options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
     });
 builder.Services.AddScoped<PasswordHasher<User>>();

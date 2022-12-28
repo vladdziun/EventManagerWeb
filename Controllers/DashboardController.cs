@@ -40,7 +40,7 @@ namespace EventManagerWeb.Controllers
             List<Event> AllEvents = _dbContext.Events
                 .Include(w => w.Guests)
                 .Where(e => e.EventDate > DateTime.Now)
-                .OrderByDescending(w => w.EventDate).ThenBy(w => w.EventTime)
+                .OrderBy(w => w.EventDate).ThenBy(w => w.EventTime)
                 .Take(5)
                 .ToList();
 
@@ -168,7 +168,7 @@ namespace EventManagerWeb.Controllers
         [Route("view/{eventId}")]
         [HttpGet]
         [AuthorizeUser]
-        public IActionResult ViewEvent(string eventId)
+        public async Task<IActionResult> ViewEvent(string eventId)
         {
             var userId = HttpContext.Session.GetString("UserId");
 
@@ -178,7 +178,7 @@ namespace EventManagerWeb.Controllers
                 .ThenInclude(a => a.User)
                 .FirstOrDefault(w => w.Id == eventId);
 
-            var geoResponse = _geocoderService.GetLongitudeAndLatitudeFromAddress(oneEvent.Address);
+            var geoResponse = await _geocoderService.GetLongitudeAndLatitudeFromAddress(oneEvent.Address);
             ViewBag.Latitude = geoResponse.Latitude;
             ViewBag.Longitude = geoResponse.Longitude;
 
