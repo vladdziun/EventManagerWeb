@@ -1,51 +1,48 @@
 @model FileUpload
 
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
 
 <body>
     <h1>Plan Your Event</h1>
-    <a href ="/dashboard">Dashboard</a> | <a href = "/logout">Logout</a>
+    <a href ="/dashboard">Back to Dashboard</a>
 
-    <form asp-action="CreateEvent" asp-controller="Dashboard" method="post" enctype="multipart/form-data class="form-group">
-            <span asp-validation-for="Event.EventTitle"></span><br>
-            <label asp-for="Event.EventTitle"></label><br>
-            <input asp-for="Event.EventTitle"><br>
+    <form asp-action="CreateEvent" asp-controller="Dashboard" method="post" enctype="multipart/form-data">
+            <span asp-validation-for="Event.EventTitle"></span>
+            <label asp-for="Event.EventTitle"></label>
+            <input class="form-control mb-2" asp-for="Event.EventTitle">
 
-            <span asp-validation-for="Event.Address"></span><br>
-            <label asp-for="Event.Address"></label><br>
-            <input asp-for="Event.Address"><br>
+            <span asp-validation-for="Event.Address"></span>
+            <label asp-for="Event.Address"></label>
+            <input  class="form-control mb-2"asp-for="Event.Address">
 
-            <span asp-validation-for="Event.EventTime"></span><br>
-            <label asp-for="Event.EventTime"></label><br>
-            <input type ="time" asp-for="Event.EventTime"><br>
-            <span asp-validation-for="Event.EventDate"></span><br>
-            <label asp-for="Event.EventDate"></label><br>
-            <input type = "date" asp-for="Event.EventDate"><br>
-            <span asp-validation-for=Event.Duration></span><br>
-            <label asp-for="Event.Duration"></label><br>
-            <input asp-for="Event.Duration">
+            <span asp-validation-for="Event.EventTime"></span>
+            <label asp-for="Event.EventTime"></label>
+            <input class="form-control mb-2" type ="time" asp-for="Event.EventTime">
+
+            <span asp-validation-for="Event.EventDate"></span>
+            <label asp-for="Event.EventDate"></label>
+            <input class="form-control mb-2" type = "date" asp-for="Event.EventDate">
+
+            <span asp-validation-for=Event.Duration></span>
+            <label asp-for="Event.Duration"></label>
+            <input class="form-control" asp-for="Event.Duration">
             <span asp-validation-for="Event.TimeType"></span>
             <label asp-for="Event.TimeType"></label>
-            <select asp-for="Event.TimeType">
+
+            <select class="form-select mb-2" asp-for="Event.TimeType">
                 <option value = "Minutes">Minutes</option>
                 <option value = "Hours">Hours</option>
                 <option value = "Days">Days</option>
-            </select><br>
-            <span asp-validation-for="Event.Description"></span><br>
-            <label asp-for="Event.Description"></label><br>
-            <input asp-for="Event.Description"><br>
+            </select>
+            <span asp-validation-for="Event.Description"></span>
+            <label asp-for="Event.Description"></label>
+            <input class="form-control mb-2" asp-for="Event.Description">
 
-            <span asp-validation-for=FileToUpload></span><br>
-            <input type="file" name="FileToUpload" class="form-control"/><br>
+            <span asp-validation-for=FileToUpload></span>
+            <label> Poster</label>
+            <input type="file" name="FileToUpload" class="form-control mb-4"/>
 
 
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button class="btn btn-primary">Create</button>
     </form>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>

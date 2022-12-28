@@ -40,7 +40,7 @@ namespace EventManagerWeb.Controllers
             List<Event> AllEvents = _dbContext.Events
                 .Include(w => w.Guests)
                 .Where(e => e.EventDate > DateTime.Now)
-                .OrderBy(w => w.EventDate).ThenBy(w => w.EventTime)
+                .OrderByDescending(w => w.EventDate).ThenBy(w => w.EventTime)
                 .Take(5)
                 .ToList();
 
@@ -71,7 +71,6 @@ namespace EventManagerWeb.Controllers
                 var oneUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
                 file.Event.CreatorName = oneUser.FirstName;
                 file.Event.UserId = userId;
-
 
                 if (file.FileToUpload != null)
                 {
@@ -104,6 +103,7 @@ namespace EventManagerWeb.Controllers
                 .Include(w => w.Guests)
                 .Where(e => e.EventTitle
                 .Contains(searchString))
+                .OrderByDescending(w => w.EventDate).ThenBy(w => w.EventTime)
                 .ToListAsync();
 
             return View("Dashboard", events);
@@ -144,7 +144,7 @@ namespace EventManagerWeb.Controllers
             {
                 To = oneUser.Email,
                 Subject = $"Confirmation for {oneEvent.EventTitle}",
-                Body = $"You signed up for {oneEvent.EventTitle} at on {oneEvent.EventDate} at {oneEvent.EventTime}"
+                Body = $"You signed up for {oneEvent.EventTitle} on {oneEvent.EventDate.ToString("MM/dd/yyyy")} at {oneEvent.EventTime.TimeOfDay}"
             };
             _emailService.SendEmail(request);
 

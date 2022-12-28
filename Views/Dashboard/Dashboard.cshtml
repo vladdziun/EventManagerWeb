@@ -4,40 +4,69 @@
 @model List<Event>
 <body>
     <h1>Welcome to Event Planner!</h1>
-    <a href = "/add/event">Add Event</a> <br><br>
+
+    <form action="/add/event">
+        <input class="btn btn-primary btn-lg mb-3" type="submit" value="Add Event" />
+    </form>
 
     <form asp-action="SearchEvent" asp-controller="Dashboard" method="post">
-        <input type="text" name="searchString" />
-        <input type="submit" value="Search" />
+        <input class="form-control mb-2" placeholder="Search by event title" type="text" name="searchString" />
+        <input class="btn btn-secondary mb-3" type="submit" value="Search" />
     </form>
     <br>
-    <p style="font-weight: bold">Top 5 upcoming events:</p>
+    <h5 class="mb-2">Top 5 upcoming events:</h5>
 
-    @foreach (var w in Model)
-    {
-        @if(w.EventDate > DateTime.Today )
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Poster</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Coordinator</th>
+                <th scope="col">Participants</th>
+                <th scope="col">Actions</th>
+
+            </tr>
+        </thead>
+
+        @foreach (var e in Model)
         {
-        <img src="@w.EventPhoto" alt="image" width="100">
-        <p><a href = "/view/@w.Id">@w.EventTitle </a> Date: @w.EventDate.ToString("MMMM dd") at @w.EventTime.ToString("h:mm tt")
-         | Duration: @w.Duration @w.TimeType | Event Coordinator: @w.CreatorName | Participants: @w.Guests?.Count | 
-            Action:
-            @if(@w.UserId == @ViewBag.UserId)
-            {
-                <a href="/delete/@w.Id">Delete</a>
-            }else{
-                @if(w.Guests.Any (g => g.UserId == @ViewBag.UserId))
-                {
-                    <a href="/leave/event/@w.Id">Leave</a>
-                }else
-                {
-                    <a href="/join/event/@w.Id">Join</a> 
-                }
-            }
-            
-        </p>
+        <tbody>
+            <tr>
+                <td><img src="@e.EventPhoto" alt="image" width="100"></td>
+                <td><a href = "/view/@e.Id">@e.EventTitle </a></td>
+                <td>@e.EventDate.ToString("MMMM dd")</td>
+                <td>@e.EventTime.ToString("h:mm tt")</td>
+                <td>@e.Duration @e.TimeType</td>
+                <td>@e.CreatorName</td>
+                <td>@e.Guests?.Count</td>
+                <td>              
+                    @if (@e.UserId == @ViewBag.UserId)
+                    {
+                        <a href="/delete/@e.Id">Delete</a>
+                    }
+                    else
+                    {
+                        @if (e.Guests.Any(g => g.UserId == @ViewBag.UserId))
+                        {
+                            <a href="/leave/event/@e.Id">Leave</a>
+                        }
+                        else
+                        {
+                            <a href="/join/event/@e.Id">Join</a> 
+                        }
+                    }
+                </td>
+            </tr>
+        </tbody>
         }
-        <br />
+    </table>
 
-    }
+
+
+
+
     
 </body>
