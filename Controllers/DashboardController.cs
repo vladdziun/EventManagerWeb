@@ -54,8 +54,6 @@ namespace EventManagerWeb.Controllers
         [HttpGet]
         public IActionResult AddEvent()
         {
-            var userId = HttpContext.Session.GetString("UserId");
-
             return View("AddEvent");
         }
 
@@ -197,25 +195,6 @@ namespace EventManagerWeb.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction("Dashboard");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UploadPhoto(FileUpload file)
-        {
-            if (file.FileToUpload != null)
-            {
-                var path = Path.Combine(wwwrootDir, DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileToUpload.FileName));
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.FileToUpload.CopyToAsync(stream);
-                }
-
-                ViewBag.filePath = path;
-                return View("AddEvent");
-            }
-
-            return View("AddEvent");
         }
     }
 }
