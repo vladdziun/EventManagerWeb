@@ -4,17 +4,20 @@
 @model List<Event>
 <body>
     <h1>Welcome to Event Planner!</h1>
-    <a href = "/add/event">Add Event</a> 
+    <a href = "/add/event">Add Event</a> <br><br>
 
-<form asp-action="SearchEvent" asp-controller="Dashboard" method="post">
+    <form asp-action="SearchEvent" asp-controller="Dashboard" method="post">
         <input type="text" name="searchString" />
         <input type="submit" value="Search" />
     </form>
+    <br>
+    <p style="font-weight: bold">Top 5 upcoming events:</p>
 
     @foreach (var w in Model)
     {
         @if(w.EventDate > DateTime.Today )
         {
+        <img src="@w.EventPhoto" alt="image" width="100">
         <p><a href = "/view/@w.Id">@w.EventTitle </a> Date: @w.EventDate.ToString("MMMM dd") at @w.EventTime.ToString("h:mm tt")
          | Duration: @w.Duration @w.TimeType | Event Coordinator: @w.CreatorName | Participants: @w.Guests?.Count | 
             Action:
@@ -32,26 +35,8 @@
             }
             
         </p>
-        }else if ( w.EventDate >= DateTime.Today && w.EventTime.TimeOfDay.TotalHours >= DateTime.Now.TimeOfDay.TotalHours)
-        {
-        <p><a href = "/view/@w.Id">@w.EventTitle </a> Date: @w.EventDate.ToString("MMMM dd") at @w.EventTime.ToString("h:mm tt")
-         | Duration: @w.Duration @w.TimeType | Event Coordinator: @w.CreatorName | Participants: @w.Guests.Count | 
-            Action:
-            @if(@w.UserId == @ViewBag.UserId)
-            {
-                <a href="/delete/@w.Id">Delete</a>
-            }else{
-                @if(w.Guests.Any (g => g.UserId == @ViewBag.UserId))
-                {
-                    <a href="/leave/event/@w.Id">Leave</a>
-                }else
-                {
-                    <a href="/join/event/@w.Id">Join</a> 
-                }
-            }
-            
-        </p>
         }
+        <br />
 
     }
     

@@ -1,37 +1,51 @@
-@model Event
+@model FileUpload
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
 <body>
     <h1>Plan Your Event</h1>
     <a href ="/dashboard">Dashboard</a> | <a href = "/logout">Logout</a>
 
-<form asp-action="CreateEvent" asp-controller="Dashboard" method="post">
-        <span asp-validation-for="EventTitle"></span><br>
-        <label asp-for="EventTitle"></label><br>
-        <input asp-for="EventTitle"><br>
+    <form asp-action="CreateEvent" asp-controller="Dashboard" method="post" enctype="multipart/form-data class="form-group">
+            <span asp-validation-for="Event.EventTitle"></span><br>
+            <label asp-for="Event.EventTitle"></label><br>
+            <input asp-for="Event.EventTitle"><br>
 
-        <span asp-validation-for="Address"></span><br>
-        <label asp-for="Address"></label><br>
-        <input asp-for="Address"><br>
+            <span asp-validation-for="Event.Address"></span><br>
+            <label asp-for="Event.Address"></label><br>
+            <input asp-for="Event.Address"><br>
 
-        <span asp-validation-for="EventTime"></span><br>
-        <label asp-for="EventTime"></label><br>
-        <input type ="time" asp-for="EventTime"><br>
-        <span asp-validation-for="EventDate"></span><br>
-        <label asp-for="EventDate"></label><br>
-        <input type = "date" asp-for="EventDate"><br>
-        <span asp-validation-for="Duration"></span><br>
-        <label asp-for="Duration"></label><br>
-        <input asp-for="Duration">
-        <span asp-validation-for="TimeType"></span>
-        <label asp-for="TimeType"></label>
-        <select asp-for="TimeType">
-            <option value = "Minutes">Minutes</option>
-            <option value = "Hours">Hours</option>
-            <option value = "Days">Days</option>
-        </select><br>
-        <span asp-validation-for="Description"></span><br>
-        <label asp-for="Description"></label><br>
-        <input asp-for="Description"><br>
-<button>Create</button>
-</form>
+            <span asp-validation-for="Event.EventTime"></span><br>
+            <label asp-for="Event.EventTime"></label><br>
+            <input type ="time" asp-for="Event.EventTime"><br>
+            <span asp-validation-for="Event.EventDate"></span><br>
+            <label asp-for="Event.EventDate"></label><br>
+            <input type = "date" asp-for="Event.EventDate"><br>
+            <span asp-validation-for=Event.Duration></span><br>
+            <label asp-for="Event.Duration"></label><br>
+            <input asp-for="Event.Duration">
+            <span asp-validation-for="Event.TimeType"></span>
+            <label asp-for="Event.TimeType"></label>
+            <select asp-for="Event.TimeType">
+                <option value = "Minutes">Minutes</option>
+                <option value = "Hours">Hours</option>
+                <option value = "Days">Days</option>
+            </select><br>
+            <span asp-validation-for="Event.Description"></span><br>
+            <label asp-for="Event.Description"></label><br>
+            <input asp-for="Event.Description"><br>
+
+            <span asp-validation-for=FileToUpload></span><br>
+            <input type="file" name="FileToUpload" class="form-control"/><br>
+
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>

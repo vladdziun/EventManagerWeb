@@ -245,6 +245,58 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077531090834138.png",
+      "PackagePath": "staticwebassets\\uploads\\638077531090834138.png"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077531744981580.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077531744981580.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077545388126102.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077545388126102.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077546750079438.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077546750079438.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077549339010349.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077549339010349.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077549599236764.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077549599236764.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077550011043641.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077550011043641.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077572105246684.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077572105246684.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077579798885607.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077579798885607.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077581791356475.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077581791356475.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077582257036300.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077582257036300.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077583990124024.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077583990124024.jpg"
+    },
+    {
+      "Id": "F:\\student\\c#\\EventManagerWeb\\EventManagerWeb\\wwwroot\\uploads\\638077612773275547.jpg",
+      "PackagePath": "staticwebassets\\uploads\\638077612773275547.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.EventManagerWeb.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

@@ -44,6 +44,8 @@ namespace EventManagerWeb.Models
         public string? UserId { get; set; }
         public string? CreatorName { get; set; }
 
+        public string? EventPhoto { get; set; }
+
         //nav
         public List<Association>? Guests { get; set; }
     }

@@ -17,6 +17,8 @@ namespace EventManagerWeb.Controllers
         private readonly IConfiguration _configuration;
         private readonly GeocoderService _geocoderService;
 
+        private readonly string wwwrootDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+
 
         public DashboardController(ApplicationDbContext dbContext, EmailService emailService, 
             IConfiguration configuration, GeocoderService geocoderService)
@@ -34,10 +36,14 @@ namespace EventManagerWeb.Controllers
         {
             var userId = HttpContext.Session.GetString("UserId");
 
+            // find top 5 upcoming events
             List<Event> AllEvents = _dbContext.Events
                 .Include(w => w.Guests)
+                .Where(e => e.EventDate > DateTime.Now)
                 .OrderBy(w => w.EventDate).ThenBy(w => w.EventTime)
+                .Take(5)
                 .ToList();
+
             ViewBag.UserId = userId;
 
             return View("Dashboard", AllEvents);
@@ -56,17 +62,32 @@ namespace EventManagerWeb.Controllers
         [Route("create/event")]
         [AuthorizeUser]
         [HttpPost]
-        public IActionResult CreateEvent(Event newEvent)
+        public async Task<IActionResult> CreateEvent(FileUpload file)
         {
             var userId = HttpContext.Session.GetString("UserId");
 
             if (ModelState.IsValid)
             {
                 var oneUser = _dbContext.Users.FirstOrDefault(u => u.Id == userId);
-                newEvent.CreatorName = oneUser.FirstName;
-                newEvent.UserId = userId;
-                _dbContext.Add(newEvent);
+                file.Event.CreatorName = oneUser.FirstName;
+                file.Event.UserId = userId;
+
+
+                if (file.FileToUpload != null)
+                {
+                    var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileToUpload.FileName);
+                    var path = Path.Combine(wwwrootDir, fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.FileToUpload.CopyToAsync(stream);
+                    }
+
+                    file.Event.EventPhoto = Path.Combine("\\uploads", fileName);
+                }
+                _dbContext.Add(file.Event);
                 _dbContext.SaveChanges();
+
                 return RedirectToAction("Dashboard");
             }
 
@@ -176,6 +197,25 @@ namespace EventManagerWeb.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(FileUpload file)
+        {
+            if (file.FileToUpload != null)
+            {
+                var path = Path.Combine(wwwrootDir, DateTime.Now.Ticks.ToString() + Path.GetExtension(file.FileToUpload.FileName));
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.FileToUpload.CopyToAsync(stream);
+                }
+
+                ViewBag.filePath = path;
+                return View("AddEvent");
+            }
+
+            return View("AddEvent");
         }
     }
 }
